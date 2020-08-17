@@ -53,14 +53,10 @@ type roundtripper struct {
 func (rt *roundtripper) RoundTrip(r *http.Request) (*http.Response, error) {
 	var isEmptyHost bool
 	var resp *http.Response
-	host := r.Host
+	host := r.URL.Host
 	if host == "" {
-		if h := r.URL.Host; h != "" {
-			host = h
-		} else {
-			host = emptyHostRename
-			isEmptyHost = true
-		}
+		host = emptyHostRename
+		isEmptyHost = true
 	}
 
 	err := Capture(r.Context(), host, func(ctx context.Context) error {
